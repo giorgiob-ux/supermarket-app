@@ -1,4 +1,4 @@
-const CACHE_NAME = 'supermarket-v4';
+const CACHE_NAME = 'supermarket-v5';
 const APP_SHELL = [
   './',
   './index.html',

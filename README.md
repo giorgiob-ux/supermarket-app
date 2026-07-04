@@ -4,13 +4,11 @@ A grocery shopping-list app that sorts items by supermarket aisle. Runs entirely
 
 ## Getting started
 
-1. Host these files somewhere static — for example:
-   - Drag the folder onto [Netlify Drop](https://app.netlify.com/drop)
-   - Or push it to a GitHub repo and enable **GitHub Pages**
-   - Or run it locally for testing: `npx serve .` (or `python3 -m http.server`) from this folder, then open the printed `http://localhost` address
-2. Open that URL on your phone.
-3. On iPhone: tap **Share → Add to Home Screen**. On Android: open the browser menu and tap **Install app** / **Add to Home Screen**.
-4. Open it from your home screen like any other app — it works fully offline from then on.
+1. On your phone, open: **https://giorgiob-ux.github.io/supermarket-app/**
+2. On iPhone: tap **Share → Add to Home Screen**. On Android: open the browser menu and tap **Install app** / **Add to Home Screen**.
+3. Open it from your home screen like any other app — it works fully offline from then on.
+
+Prefer to host your own copy instead of using that link? This folder contains the full app source — drag it onto [Netlify Drop](https://app.netlify.com/drop), push it to a GitHub repo and enable **GitHub Pages**, or run it locally for testing with `npx serve .` (or `python3 -m http.server`).
 
 > Opening `index.html` directly from your file system (double-clicking it) will *not* enable offline installation, because phone browsers require a real `http(s)` address for that. It's still fine for a quick look on desktop.
 

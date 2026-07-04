@@ -1,7 +1,7 @@
 {
   "name": "Supermarket",
   "short_name": "Supermarket",
-  "description": "A shared-style grocery list with aisle sorting, running fully offline on your device.",
+  "description": "A grocery list with aisle sorting, running fully offline on your device.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
