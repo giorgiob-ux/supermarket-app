@@ -1,0 +1,86 @@
+SUPERMARKET — SETUP INSTRUCTIONS
+=================================
+
+Thanks for buying Supermarket! You've downloaded a .zip file from
+Gumroad — here's how to get it running on your phone. It takes about
+5 minutes and you won't need to write any code.
+
+WHAT YOU HAVE
+-------------
+Inside this folder is the entire app: a handful of files that need to
+be hosted somewhere on the web (for free) so your phone can open them
+and install the app. There is no account to create and no data is
+ever sent anywhere — everything you add stays on your own phone.
+
+
+STEP 1 — Unzip
+--------------
+If you haven't already, unzip the file you downloaded from Gumroad.
+You should see this file plus a folder structure with index.html,
+style.css, an "icons" folder, and a few others. Keep them all together
+— don't move or rename individual files.
+
+
+STEP 2 — Put it online (pick ONE option)
+-----------------------------------------
+Your phone needs a real web address (https://...) to install the app
+properly, so it needs to be hosted somewhere. Two free, beginner-friendly
+options:
+
+  OPTION A — Netlify Drop (fastest)
+  1. On your computer, go to: https://app.netlify.com/drop
+  2. Drag the whole Supermarket folder (the one with index.html inside)
+     onto the page.
+  3. Netlify gives you a web address like https://random-name.netlify.app
+     — that's your app's address.
+
+  OPTION B — GitHub Pages (if you already use GitHub)
+  1. Create a new repository and upload the contents of this folder to it.
+  2. In the repository's Settings → Pages, enable GitHub Pages for the
+     main branch.
+  3. GitHub gives you a web address like
+     https://yourname.github.io/reponame — that's your app's address.
+
+Either way, open that address in a browser first to make sure the app
+loads before moving to Step 3.
+
+
+STEP 3 — Install it on your phone
+-----------------------------------
+1. Open the web address from Step 2 in Safari (iPhone) or Chrome
+   (Android) on your phone.
+2. iPhone: tap the Share icon (square with an arrow) → "Add to Home
+   Screen" → Add.
+   Android: tap the browser's menu (⋮) → "Install app" or "Add to
+   Home Screen".
+3. Open Supermarket from your home screen, just like any other app.
+
+From this point on it works completely offline — you can turn on
+airplane mode and it still works, because everything is stored on
+your phone.
+
+
+STEP 4 — Start using it
+------------------------
+- Tap + to create your first list.
+- Type grocery items in English or Italian — the app recognizes
+  hundreds of common items automatically.
+- Tap the ⇅ icon to sort by aisle, alphabetically, or by most
+  recently added.
+- Go to ⚙️ Settings to edit the aisle layout so it matches YOUR
+  supermarket (it ships with an example layout — customizing it
+  takes a couple of minutes and makes aisle-sorting far more useful).
+
+See README.md in this folder for more detail on every feature, and
+LICENSE.txt for the terms of use.
+
+
+TROUBLESHOOTING
+----------------
+- "It won't install / no 'Add to Home Screen' option": make sure
+  you're using Safari on iPhone or Chrome on Android (not an in-app
+  browser like Instagram's), and that the address starts with https://.
+- "I lost my lists": if you ever clear your phone's browser data or
+  switch phones, you'll lose everything unless you had exported a
+  backup first. Go to ⚙️ Settings → Backup → Export data regularly.
+- Still stuck? Reply to your Gumroad receipt email and I'll help.

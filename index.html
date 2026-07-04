@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Supermarket</title>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0066cc"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="icons/logo.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+  <meta name="apple-mobile-web-app-title" content="Supermarket"/>
+</head>
+<body>
+
+<!-- ── LISTS SCREEN ───────────────────────────────────────────────────── -->
+<div id="screen-lists" class="screen active">
+  <div class="screen-header">
+    <div class="app-brand">
+      <img src="icons/logo.png" class="brand-icon" style="width:48px;height:48px;object-fit:contain;"/>
+      <span class="brand-name">Supermarket</span>
+    </div>
+    <button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button>
+  </div>
+
+  <div id="lists-grid" class="lists-grid"></div>
+
+  <button class="fab" id="fab-new-list" onclick="openNewListModal()">＋</button>
+</div>
+
+<!-- ── SHOPPING SCREEN ────────────────────────────────────────────────── -->
+<div id="screen-shop" class="screen">
+
+  <div class="shop-header" id="shop-header">
+    <div class="shop-header-row">
+      <button class="icon-btn" onclick="goBack()">←</button>
+      <div class="shop-header-title">
+        <span id="shop-emoji" class="shop-emoji"></span>
+        <span id="shop-name" class="shop-name">List</span>
+      </div>
+      <div class="shop-header-right">
+        <button class="icon-btn" onclick="openFrequent()" title="Frequent items">⭐</button>
+        <button class="icon-btn" onclick="cycleSort()" id="btn-sort" title="Sort">⇅</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-bar">
+    <span id="sort-label" class="sort-label">Aisle order</span>
+    <span id="supermarket-badge" class="supermarket-badge"></span>
+  </div>
+
+  <div class="add-bar">
+    <div class="add-row">
+      <div class="add-input-wrap">
+        <input id="item-input" type="text" placeholder="Add item… (English or Italian)"
+          autocomplete="off" autocorrect="off" spellcheck="false" inputmode="text"/>
+      </div>
+    </div>
+    <div class="add-row">
+      <input id="qty-input" type="text" placeholder="Qty" class="qty-input"/>
+      <input id="add-note-input" type="text" placeholder="Note (optional)" class="add-note-input"/>
+    </div>
+    <div class="add-row add-row-bottom">
+      <label class="add-gluten-label">
+        <input id="add-gluten-free" type="checkbox"/> 🌾 Gluten Free
+      </label>
+      <button class="add-btn" onclick="addItem()">Add</button>
+    </div>
+  </div>
+  <div id="suggestions" class="suggestions hidden"></div>
+
+  <div id="items-container" class="items-container"></div>
+
+  <div class="bottom-bar">
+    <button class="bottom-action" onclick="clearChecked()">Remove checked</button>
+    <button class="bottom-action danger" onclick="deleteListConfirm()">Delete list</button>
+  </div>
+</div>
+
+<!-- ── SETTINGS SCREEN ────────────────────────────────────────────────── -->
+<div id="screen-settings" class="screen">
+  <div class="screen-header">
+    <button class="icon-btn" onclick="showScreen('screen-lists')">←</button>
+    <span class="brand-name" style="font-size:18px">Settings</span>
+    <span style="width:60px"></span>
+  </div>
+  <div class="settings-body">
+    <div class="settings-section">
+      <div class="pref-section-title">Supermarkets</div>
+      <div id="settings-supermarkets-list"></div>
+      <button class="btn-catalogue" onclick="openSupermarketModal()">＋ Add supermarket</button>
+    </div>
+    <div class="settings-section">
+      <div class="pref-section-title">Backup</div>
+      <p class="muted">Your lists live only on this device. Export a backup occasionally so you don't lose them.</p>
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="exportData()">⬇️ Export data</button>
+        <button class="btn-ghost" onclick="triggerImport()">⬆️ Import data</button>
+      </div>
+      <input id="import-file-input" type="file" accept="application/json" class="hidden" onchange="handleImportFile(event)"/>
+    </div>
+  </div>
+</div>
+
+<!-- ── AISLES SCREEN ──────────────────────────────────────────────────── -->
+<div id="screen-aisles" class="screen">
+  <div class="screen-header">
+    <button class="icon-btn" onclick="backToSettings()">←</button>
+    <span id="aisles-title" class="brand-name" style="font-size:18px">Aisles</span>
+    <span style="width:60px"></span>
+  </div>
+  <div class="settings-body">
+    <div id="aisles-list"></div>
+    <button class="btn-catalogue" onclick="openAisleModal()">＋ Add aisle</button>
+  </div>
+</div>
+
+
+<!-- ── NEW LIST MODAL ─────────────────────────────────────────────────── -->
+<div id="modal-new-list" class="modal-overlay hidden">
+  <div class="modal">
+    <h2>New list</h2>
+    <div class="emoji-picker" id="emoji-picker"></div>
+    <input id="new-list-name" type="text" placeholder="List name" maxlength="50"/>
+    <select id="new-list-super" class="select-input"></select>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('modal-new-list')">Cancel</button>
+      <button class="btn-primary" onclick="createList()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ITEM EDIT MODAL ────────────────────────────────────────────────── -->
+<div id="modal-item" class="modal-overlay hidden">
+  <div class="modal">
+    <h2 id="item-modal-title">Edit item</h2>
+    <input id="edit-qty" type="text" placeholder="Quantity (e.g. 2 packs, 500g)"/>
+    <textarea id="edit-note" placeholder="Note (optional)…" rows="3"></textarea>
+    <label class="checkbox-label">
+      <input id="edit-gluten-free" type="checkbox"/>
+      🌾 Gluten Free
+    </label>
+    <button class="btn-catalogue" onclick="openCatalogueEdit()">✏️ Edit in catalogue</button>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('modal-item')">Cancel</button>
+      <button class="btn-primary" onclick="saveItemEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CATALOGUE EDIT MODAL ───────────────────────────────────────────── -->
+<div id="modal-catalogue" class="modal-overlay hidden">
+  <div class="modal">
+    <h2 id="modal-catalogue-title">Edit Item</h2>
+    <div class="catalogue-emoji-row">
+      <div class="catalogue-emoji-preview" id="cat-emoji-preview">🛒</div>
+      <div class="catalogue-emoji-grid" id="cat-emoji-grid"></div>
+    </div>
+    <label>Icon (emoji) <input id="cat-emoji" type="text" maxlength="2" placeholder="🛒"/></label>
+    <label>English name <input id="cat-name-en" type="text" placeholder="Whole Wheat Bread"/></label>
+    <label>Italian name <input id="cat-name-it" type="text" placeholder="Pane Integrale"/></label>
+    <label>Category
+      <select id="cat-category">
+        <option value="">— Select category —</option>
+        <option value="Fruit and Vegetables">Fruit and Vegetables</option>
+        <option value="Bakery &amp; Bread">Bakery &amp; Bread</option>
+        <option value="Fish &amp; Seafood">Fish &amp; Seafood</option>
+        <option value="Meat &amp; Poultry">Meat &amp; Poultry</option>
+        <option value="Deli &amp; Charcuterie">Deli &amp; Charcuterie</option>
+        <option value="Dairy &amp; Eggs">Dairy &amp; Eggs</option>
+        <option value="Frozen Foods">Frozen Foods</option>
+        <option value="Beverages &amp; Juices">Beverages &amp; Juices</option>
+        <option value="Water &amp; Soft Drinks">Water &amp; Soft Drinks</option>
+        <option value="Breakfast &amp; Cereals">Breakfast &amp; Cereals</option>
+        <option value="Pasta, Rice &amp; Grains">Pasta, Rice &amp; Grains</option>
+        <option value="Canned &amp; Jarred Goods">Canned &amp; Jarred Goods</option>
+        <option value="Sauces &amp; Condiments">Sauces &amp; Condiments</option>
+        <option value="Spices &amp; Cooking">Spices &amp; Cooking</option>
+        <option value="Baking &amp; Confectionery">Baking &amp; Confectionery</option>
+        <option value="Snacks &amp; Biscuits">Snacks &amp; Biscuits</option>
+        <option value="International Foods">International Foods</option>
+        <option value="Health &amp; Organic">Health &amp; Organic</option>
+        <option value="Baby &amp; Infant">Baby &amp; Infant</option>
+        <option value="Health &amp; Beauty">Health &amp; Beauty</option>
+        <option value="Cleaning &amp; Laundry">Cleaning &amp; Laundry</option>
+        <option value="Paper &amp; Disposables">Paper &amp; Disposables</option>
+        <option value="Pet Food &amp; Supplies">Pet Food &amp; Supplies</option>
+        <option value="General">General</option>
+      </select>
+    </label>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('modal-catalogue')">Cancel</button>
+      <button class="btn-primary" onclick="saveCatalogueEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SUPERMARKET MODAL ──────────────────────────────────────────────── -->
+<div id="modal-supermarket" class="modal-overlay hidden">
+  <div class="modal">
+    <h2 id="modal-supermarket-title">Add supermarket</h2>
+    <label>Icon (emoji) <input id="super-emoji" type="text" maxlength="2" placeholder="🛒"/></label>
+    <label>Name <input id="super-name" type="text" placeholder="My Local Supermarket"/></label>
+    <label>City <input id="super-city" type="text" placeholder="City (optional)"/></label>
+    <label>Country <input id="super-country" type="text" placeholder="Country (optional)"/></label>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('modal-supermarket')">Cancel</button>
+      <button class="btn-primary" onclick="saveSupermarket()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── AISLE MODAL ────────────────────────────────────────────────────── -->
+<div id="modal-aisle" class="modal-overlay hidden">
+  <div class="modal">
+    <h2 id="modal-aisle-title">Add aisle</h2>
+    <label>Icon (emoji) <input id="aisle-emoji" type="text" maxlength="2" placeholder="🛒"/></label>
+    <label>Label <input id="aisle-label" type="text" placeholder="Aisle 1 — Fruit and Vegetables"/></label>
+    <label>Category
+      <select id="aisle-category"></select>
+    </label>
+    <p class="muted">Items whose category matches will group under this aisle.</p>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('modal-aisle')">Cancel</button>
+      <button class="btn-primary" onclick="saveAisle()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── FREQUENT ITEMS SHEET ──────────────────────────────────────────── -->
+<div id="freq-overlay" class="sheet-overlay hidden" onclick="closeFrequent()"></div>
+<div id="freq-sheet" class="bottom-sheet hidden">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">⭐ Frequent Items</span>
+    <button class="icon-btn" onclick="closeFrequent()">✕</button>
+  </div>
+  <div id="freq-list" class="freq-list"></div>
+  <div class="sheet-footer">
+    <button class="btn-primary" onclick="addFreqSelected()">Add selected</button>
+  </div>
+</div>
+
+<div id="save-prompt" class="save-prompt hidden">
+  <div class="save-prompt-card">
+    <div class="save-prompt-icon" id="save-prompt-icon">🛒</div>
+    <div class="save-prompt-title">Save for future use?</div>
+    <div class="save-prompt-text">
+      Add <span class="save-prompt-name" id="save-prompt-name"></span> to your personal catalogue so it appears in suggestions next time.
+    </div>
+    <div class="save-prompt-actions">
+      <button class="save-prompt-btn no"  onclick="savePromptNo()">No thanks</button>
+      <button class="save-prompt-btn yes" onclick="savePromptYes()">Yes, save it</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="js/itemdb.js"></script>
+<script src="js/store.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
